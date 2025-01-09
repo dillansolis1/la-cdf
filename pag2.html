@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Cuna del Fútbol</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2c2c2c;
+        }
+        header {
+            background-color: #d4af37;
+            color: black;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+        header img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 120px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #2c2c2c;
+        }
+        nav a {
+            color: #d4af37;
+            padding: 1rem;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        nav a:hover {
+            background-color: #d4af37;
+            color: black;
+        }
+        section {
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+        footer {
+            background-color: #2c2c2c;
+            color: #d4af37;
+            text-align: center;
+            padding: 1rem;
+            position: relative;
+        }
+        button {
+            background-color: #d4af37;
+            color: black;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: black;
+            color: #d4af37;
+        }
+        .contacto-info {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+        .jugadores-lista {
+            display: flex;
+            flex-wrap: wrap; /* Permite el ajuste de filas */
+            justify-content: flex-start; /* Alinea los jugadores a la izquierda */
+            gap: 20px; /* Espacio entre los jugadores */
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .jugador {
+            background-color: #444;
+            padding: 15px;
+            width: 230px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+            flex-shrink: 0; /* Impide que los elementos se reduzcan */
+        }
+
+        .jugador:hover {
+            transform: scale(1.05);
+        }
+
+        .jugador img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .jugador input {
+            width: 100%;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+        }
+
+        .jugador button {
+            background-color: #d4af37;
+            color: black;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+
+        .jugador button:hover {
+            background-color: black;
+            color: #d4af37;
+        }
+
+        .jugador .form-group {
+            margin-bottom: 10px;
+        }
+
+        .jugador label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .jugador .promedio-container {
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="C:/Users/Dilan/Desktop/cdf/img/cdfof.jpg" alt="Logo de La Cuna del Fútbol">
+        <h1>La Cuna Del Fútbol Club</h1>
+        <p>Bienvenidos a la página oficial de nuestro equipo</p>
+    </header>
+    <nav>
+        <a href="pag1.html">Inicio</a>
+        <a href="pag2.html">Jugadores</a>
+        <a href="pag1.html">Partidos</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+
+    <section id="jugadores">
+        <h2>Jugadores</h2>
+        <p>Modifica los datos de los jugadores.</p>
+        <div id="jugadores-lista" class="jugadores-lista"></div>
+        <button onclick="agregarJugador()">Agregar Jugador</button>
+    </section>
+
+    <section id="contacto">
+        <h2>Contacto</h2>
+        <p>¿Tienes preguntas? ¡Contáctanos!</p>
+        <div class="contacto-info">
+            <p>Teléfono: <a href="tel:+17713911596">7713911596</a></p>
+            <p>¡Llámanos para más información!</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 La Cuna del Fútbol. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let jugadores = JSON.parse(localStorage.getItem('jugadores')) || [];
+
+        function mostrarJugadores() {
+            const listaJugadores = document.getElementById("jugadores-lista");
+            listaJugadores.innerHTML = "";
+
+            jugadores.forEach((jugador, index) => {
+                const div = document.createElement("div");
+                div.classList.add("jugador");
+
+                div.innerHTML = `
+                    <img src="${jugador.foto}" alt="Foto de ${jugador.nombre}" />
+                    <input type="file" id="foto-${index}" onchange="cambiarFoto(${index})" />
+                    
+                    <div class="form-group">
+                        <label for="nombre-${index}">Nombre:</label>
+                        <input type="text" id="nombre-${index}" value="${jugador.nombre}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="posicion-${index}">Posición:</label>
+                        <input type="text" id="posicion-${index}" value="${jugador.posicion}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaNacimiento-${index}">Fecha de Nacimiento:</label>
+                        <input type="date" id="fechaNacimiento-${index}" value="${jugador.fechaNacimiento}" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="golesAnotados-${index}">Goles Anotados:</label>
+                        <input type="number" id="golesAnotados-${index}" value="${jugador.golesAnotados}" onchange="actualizarPromedio(${index})" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="partidosJugados-${index}">Partidos Jugados:</label>
+                        <input type="number" id="partidosJugados-${index}" value="${jugador.partidosJugados}" onchange="actualizarPromedio(${index})" />
+                    </div>
+
+                    <div class="promedio-container">
+                        <label for="promedioGoles-${index}">Promedio de Goles por Partido:</label>
+                        <input type="number" id="promedioGoles-${index}" value="${jugador.promedioGoles}" readonly />
+                    </div>
+
+                    <button onclick="actualizarJugador(${index})">Actualizar Jugador</button>
+                    <button onclick="eliminarJugador(${index})">Eliminar Jugador</button>
+                `;
+
+                listaJugadores.appendChild(div);
+            });
+        }
+
+        function actualizarJugador(index) {
+            const nombre = document.getElementById(`nombre-${index}`).value;
+            const posicion = document.getElementById(`posicion-${index}`).value;
+            const fechaNacimiento = document.getElementById(`fechaNacimiento-${index}`).value;
+            const golesAnotados = parseInt(document.getElementById(`golesAnotados-${index}`).value);
+            const partidosJugados = parseInt(document.getElementById(`partidosJugados-${index}`).value);
+            const promedioGoles = parseFloat(document.getElementById(`promedioGoles-${index}`).value);
+
+            jugadores[index] = {
+                nombre,
+                posicion,
+                fechaNacimiento,
+                golesAnotados,
+                partidosJugados,
+                promedioGoles,
+                foto: jugadores[index].foto
+            };
+
+            guardarJugadores();
+            mostrarJugadores();
+        }
+
+        function agregarJugador() {
+            const nuevoJugador = {
+                nombre: "Nuevo Jugador",
+                posicion: "",
+                fechaNacimiento: "",
+                golesAnotados: 0,
+                partidosJugados: 0,
+                promedioGoles: 0,
+                foto: "https://via.placeholder.com/150"
+            };
+
+            jugadores.push(nuevoJugador);
+            guardarJugadores();
+            mostrarJugadores();
+        }
+
+        function eliminarJugador(index) {
+            jugadores.splice(index, 1);
+            guardarJugadores();
+            mostrarJugadores();
+        }
+
+        function guardarJugadores() {
+            localStorage.setItem('jugadores', JSON.stringify(jugadores));
+        }
+
+        function actualizarPromedio(index) {
+            const golesAnotados = parseInt(document.getElementById(`golesAnotados-${index}`).value);
+            const partidosJugados = parseInt(document.getElementById(`partidosJugados-${index}`).value);
+            const promedio = partidosJugados > 0 ? (golesAnotados / partidosJugados).toFixed(2) : 0;
+            document.getElementById(`promedioGoles-${index}`).value = promedio;
+        }
+
+        function cambiarFoto(index) {
+            const fotoInput = document.getElementById(`foto-${index}`);
+            const file = fotoInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    jugadores[index].foto = event.target.result;
+                    guardarJugadores();
+                    mostrarJugadores();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        mostrarJugadores();
+    </script>
+</body>
+</html>
